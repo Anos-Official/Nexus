@@ -1,6 +1,43 @@
 [package]
 name = "nexus"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
 
 [dependencies]
+# Libraries get wired in here later, e.g. nexus-core.workspace = true
+
+[workspace]
+resolver = "3"
+# The central crate, then every crate of every system (nexus-core/<system>/<crate>).
+members = ["nexus-core/core", "nexus-core/math/*"]
+# Makes a plain `cargo test` / `cargo build` cover the engine AND every library.
+default-members = [".", "nexus-core/core", "nexus-core/math/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# One place to declare each internal library. Any crate can then depend on it
+# with `nexus-core.workspace = true`. Add the lines for each new system here.
+[workspace.dependencies]
+nexus-core = { path = "nexus-core/core" }
+nexus-math-spec = { path = "nexus-core/math/spec" }
+nexus-math-backup = { path = "nexus-core/math/backup" }
+nexus-math-default = { path = "nexus-core/math/default" }
+nexus-math-performant = { path = "nexus-core/math/performant" }
+
+# `cargo build --release`: fast code, and still small.
+[profile.release]
+opt-level = 3        # fastest code
+lto = "fat"          # optimize across all crates, drops unused code
+codegen-units = 1    # one unit: better optimization, smaller output
+panic = "abort"      # no unwinding tables: smaller binary, less memory
+strip = true         # remove symbols and debug info from the binary
+debug = false
+
+# `cargo build --profile release-small`: smallest possible binary, a bit slower.
+[profile.release-small]
+inherits = "release"
+opt-level = "z"

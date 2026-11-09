@@ -1,0 +1,9 @@
+[package]
+name = "nexus-math-spec"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+# Intentionally empty: the contract tests and benchmarks are written here once
+# and each mode crate runs them.

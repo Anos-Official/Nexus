@@ -1,0 +1,8 @@
+[package]
+name = "nexus-math-backup"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+# Intentionally empty: the math library needs nothing (build order #1).

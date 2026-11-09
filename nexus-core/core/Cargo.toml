@@ -1,0 +1,12 @@
+[package]
+name = "nexus-core"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+# Every mode of every system is linked in side by side. Which mode a game
+# uses is decided later, when the engine builds and releases that game.
+[dependencies]
+nexus-math-backup.workspace = true
+nexus-math-default.workspace = true
+nexus-math-performant.workspace = true
